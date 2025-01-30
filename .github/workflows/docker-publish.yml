@@ -1,0 +1,23 @@
+name: Build and Publish Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Login to Docker registry
+        run: echo "${{ env.REGISTRY_PASS }}" | docker login registry.deepful.dev -u "${{ env.REGISTRY_USER }}" --password-stdin
+        env:
+          REGISTRY_USER: deepful     
+          REGISTRY_PASS: WqtySBwvaZhA8Nx69MX2zU 
+          
+      - name: Build and push Docker image
+        run: |
+          docker build -t registry.deepful.dev/deepful/node-app-test:latest .
+          docker push registry.deepful.dev/deepful/node-app-test:latest
